@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
+
     const chatMessages = document.getElementById('chat-messages');
     const userInput = document.getElementById('user-input');
     const sendButton = document.getElementById('send-btn');
@@ -7,48 +7,54 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingOverlay = document.getElementById('loading-overlay');
     const suggestionButtons = document.querySelectorAll('.suggestion-btn');
 
-    // Auto-resize textarea
     userInput.addEventListener('input', function() {
         this.style.height = 'auto';
         this.style.height = (this.scrollHeight) + 'px';
-        // Reset height if empty
+
         if (this.value === '') {
             this.style.height = 'auto';
         }
     });
 
-    // Start a conversation and store the conversation ID
     let conversationId = null;
 
-    // Initialize the conversation
     function initializeConversation() {
+        showLoading();
+
         fetch('/start-conversation', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
-            conversationId = data.conversation_id;
-            console.log("Conversation started with ID:", conversationId);
+            hideLoading();
+            if (data.status === "success") {
+                conversationId = data.conversation_id;
+                console.log("Conversation started with ID:", conversationId);
+
+                addMessage('assistant', 'Hello! I\'m your Open Source Contribution Assistant. How can I help you today?');
+            } else {
+                throw new Error(data.message || 'Failed to start conversation');
+            }
         })
         .catch(error => {
+            hideLoading();
             console.error('Error starting conversation:', error);
             addMessage('assistant', 'Sorry, there was an error connecting to the server. Please try refreshing the page.');
         });
     }
 
-    // Reset conversation
     function resetConversation() {
-        if (!conversationId) {
-            initializeConversation();
-            return;
-        }
-
         showLoading();
-        
-        fetch(`/reset-conversation/${conversationId}`, {
+
+        fetch('/api/reset', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -57,58 +63,54 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             hideLoading();
-            // Clear chat messages except the first welcome message
-            while (chatMessages.children.length > 1) {
-                chatMessages.removeChild(chatMessages.lastChild);
+            if (data.status === "success") {
+
+                chatMessages.innerHTML = '';
+
+                initializeConversation();
+            } else {
+                throw new Error(data.message || 'Failed to reset conversation');
             }
-            console.log("Conversation reset");
         })
         .catch(error => {
             hideLoading();
             console.error('Error resetting conversation:', error);
-            addMessage('assistant', 'Sorry, there was an error resetting the conversation. Please try refreshing the page.');
+            addMessage('assistant', 'Error resetting conversation: ' + error.message);
         });
     }
 
-    // Add message to chat
     function addMessage(sender, text) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}-message`;
-        
+
         const avatarDiv = document.createElement('div');
         avatarDiv.className = 'message-avatar';
-        
+
         const avatarIcon = document.createElement('i');
         avatarIcon.className = sender === 'user' ? 'fas fa-user' : 'fas fa-robot';
         avatarDiv.appendChild(avatarIcon);
-        
+
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
-        
-        // Process markdown in text
+
         contentDiv.innerHTML = processMarkdown(text);
-        
+
         messageDiv.appendChild(avatarDiv);
         messageDiv.appendChild(contentDiv);
-        
+
         chatMessages.appendChild(messageDiv);
-        
-        // Scroll to bottom
+
         chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        // Add syntax highlighting to code blocks
+
         addSyntaxHighlighting();
-        
-        // Make links open in new tab
+
         makeLinksExternal();
     }
 
-    // Process markdown
     function processMarkdown(text) {
-        return marked.parse(text)
+        return marked.parse(text);
     }
 
-    // Escape HTML to prevent XSS
     function escapeHTML(text) {
         return text
             .replace(/&/g, '&amp;')
@@ -118,17 +120,14 @@ document.addEventListener('DOMContentLoaded', function() {
             .replace(/'/g, '&#039;');
     }
 
-    // Add syntax highlighting to code blocks (placeholder - would use a library in production)
     function addSyntaxHighlighting() {
-        // This is a placeholder. In a production app, you'd use a library like highlight.js
-        // For now, we'll just apply some basic styling
+
         const codeBlocks = document.querySelectorAll('pre code');
         codeBlocks.forEach(block => {
             block.style.color = '#333';
         });
     }
 
-    // Make links open in new tab
     function makeLinksExternal() {
         const links = document.querySelectorAll('.message-content a');
         links.forEach(link => {
@@ -137,40 +136,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Show loading overlay
     function showLoading() {
         loadingOverlay.classList.remove('hidden');
     }
 
-    // Hide loading overlay
     function hideLoading() {
         loadingOverlay.classList.add('hidden');
     }
 
-    // Send message
     function sendMessage() {
         const message = userInput.value.trim();
-        
+
         if (!message) return;
-        
-        // Clear input
+
         userInput.value = '';
         userInput.style.height = 'auto';
-        
-        // Add user message to chat
+
         addMessage('user', message);
-        
-        // Disable input while waiting for response
+
         userInput.disabled = true;
         sendButton.disabled = true;
-        
-        // Show loading
+
         showLoading();
-        
-        // If conversation not initialized yet, initialize it first
+
         if (!conversationId) {
             initializeConversation();
-            // Wait a bit for initialization to complete
+
             setTimeout(() => {
                 getChatResponse(message);
             }, 1000);
@@ -179,9 +170,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Get response from server
     function getChatResponse(message) {
-        fetch('/chat', {
+        fetch('/api/chat', {  
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -199,55 +189,48 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            // Hide loading
             hideLoading();
-            
-            // Add assistant message to chat
-            addMessage('assistant', data.response);
-            
-            // Re-enable input
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            addMessage('assistant', data.answer);
+
             userInput.disabled = false;
             sendButton.disabled = false;
             userInput.focus();
         })
         .catch(error => {
-            // Hide loading
             hideLoading();
-            
             console.error('Error:', error);
-            addMessage('assistant', 'Sorry, there was an error processing your request. Please try again later.');
-            
-            // Re-enable input
+            addMessage('assistant', 'Sorry, there was an error: ' + error.message);
             userInput.disabled = false;
             sendButton.disabled = false;
         });
     }
 
-    // Event listeners
     sendButton.addEventListener('click', sendMessage);
-    
+
     userInput.addEventListener('keydown', function(event) {
-        // Send on Enter without Shift
+
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
             sendMessage();
         }
     });
-    
+
     resetButton.addEventListener('click', resetConversation);
-    
-    // Suggestion buttons
+
     suggestionButtons.forEach(button => {
         button.addEventListener('click', function() {
             userInput.value = this.textContent;
-            userInput.dispatchEvent(new Event('input')); // Trigger resize
+            userInput.dispatchEvent(new Event('input')); 
             sendMessage();
         });
     });
 
-    // Initialize the conversation on page load
     initializeConversation();
-    
-    // Focus input on page load
+
     userInput.focus();
 });
