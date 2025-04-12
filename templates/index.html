@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenSource Contribution Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i class="fab fa-github"></i>
+                <h1>OpenSource Contribution Assistant</h1>
+            </div>
+            <div class="settings">
+                <button id="reset-btn" class="reset-button">
+                    <i class="fas fa-sync-alt"></i> Reset Chat
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Getting Started</h2>
+                </div>
+                <div class="sidebar-content">
+                    <div class="suggestion-item">
+                        <button class="suggestion-btn">Find beginner-friendly repositories</button>
+                    </div>
+                    <div class="suggestion-item">
+                        <button class="suggestion-btn">How to contribute to open source?</button>
+                    </div>
+                    <div class="suggestion-item">
+                        <button class="suggestion-btn">Find Python projects to contribute to</button>
+                    </div>
+                    <div class="suggestion-item">
+                        <button class="suggestion-btn">Show good first issues in tensorflow/tensorflow</button>
+                    </div>
+                    <div class="suggestion-item">
+                        <button class="suggestion-btn">How to create a pull request?</button>
+                    </div>
+                </div>
+                <div class="sidebar-footer">
+                    <p>Powered by <strong>LangChain</strong> & <strong>Gemini</strong></p>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="message assistant-message">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Hello! I'm your OpenSource Contribution Assistant. I can help you find beginner-friendly projects, explain how to contribute, and guide you through your open source journey. What would you like to know?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <textarea id="user-input" class="chat-input" placeholder="Ask about open source projects, contribution guides, finding issues..." rows="1"></textarea>
+                        <button id="send-btn" class="send-button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-circle-notch fa-spin"></i>
+            <span>Getting information from GitHub...</span>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
