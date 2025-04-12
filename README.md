@@ -105,6 +105,12 @@ Access the chatbot at: [http://localhost:5000](http://localhost:5000)
 
 ---
 
+## 📷 Demo
+![index page](demo.png)
+
+---
+
+
 ## 📄 License
 
 MIT License
