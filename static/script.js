@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 conversationId = data.conversation_id;
                 console.log("Conversation started with ID:", conversationId);
 
-                addMessage('assistant', 'Hello! I\'m your Open Source Contribution Assistant. How can I help you today?');
+                //addMessage('assistant', 'Hello! I\'m your Open Source Contribution Assistant. How can I help you today?');
             } else {
                 throw new Error(data.message || 'Failed to start conversation');
             }
