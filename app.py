@@ -54,7 +54,7 @@ chat_request_schema = ChatRequestSchema()
 class OpenSourceChat:
     def __init__(self):
         self.llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-pro",
+            model="gemini-2.5-flash",
             google_api_key=GOOGLE_API_KEY,
             temperature=0.7,
             convert_system_message_to_human=True
