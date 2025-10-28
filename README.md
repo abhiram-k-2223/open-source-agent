@@ -113,7 +113,7 @@ Access the chatbot at: [http://localhost:5000](http://localhost:5000)
 
 ## Deployment
 
-Currently live on: [render](https:open-source-agent-uvwi-onrender.com)
+Currently live on: [render](https://open-source-agent-uvwi.onrender.com/)
 
 ---
 
