@@ -1,22 +1,26 @@
-# 🧠 Open Source Agent
+# Open Source Agent
 
 A smart assistant for discovering and contributing to open source projects. This AI-powered chatbot helps users find GitHub repositories, understand contribution guidelines, and explore trending technologies, repositories, and community discussions in real time.
 
 ---
 
-## 🚀 Features
+## Note
+This project uses Gemini API on a free-tier plan, which includes rate limits. The deployed version hosted on Render may occasionally hit those limits. If you're accessing the site via the link in the description of this repository, please be mindful of potential delays or temporary unavailability.
 
-- 🔍 Search and recommend beginner-friendly GitHub repositories.
-- 🐛 Discover open issues labeled as "good first issue", "help wanted", etc.
-- 📄 Fetch and summarize contribution guidelines.
-- 📊 Analyze repository insights: commit activity, PR merge rates, technologies, etc.
-- 🌐 Crawl the web (GitHub Trending, Dev.to, Reddit, RSS feeds) for open-source trends.
-- 🤖 Conversational memory to track chat history and user preferences.
-- ❓ Surface relevant Stack Overflow discussions for help.
+
+## Features
+
+- Search and recommend beginner-friendly GitHub repositories.
+- Discover open issues labeled as "good first issue", "help wanted", etc.
+- Fetch and summarize contribution guidelines.
+- Analyze repository insights: commit activity, PR merge rates, technologies, etc.
+- Crawl the web (GitHub Trending, Dev.to, Reddit, RSS feeds) for open-source trends.
+- Conversational memory to track chat history and user preferences.
+- Surface relevant Stack Overflow discussions for help.
 
 ---
 
-## 🗂 Project Structure
+## Project Structure
 
 ```
 open-source-agent/
@@ -32,7 +36,7 @@ open-source-agent/
 
 ---
 
-## ⚙️ Setup
+## Setup
 
 ### 1. Clone the Repository
 
@@ -65,12 +69,12 @@ GITHUB_TOKEN=your_github_token
 
 ---
 
-## 🧠 How It Works
+## How It Works
 
 This application uses:
 
 - **Flask** for web server & API routing.
-- **LangChain** + **Google Gemini** for smart conversation and embeddings.
+- **LangChain** + **Google Gemini** + **FastEmbedEmbeddings** for smart conversation and embeddings.
 - **FAISS** for semantic search on curated open-source contribution data.
 - **GitHub API** to fetch repositories, issues, insights.
 - **Web scraping** & **RSS feeds** to fetch trending resources.
@@ -78,7 +82,7 @@ This application uses:
 
 ---
 
-## 📦 API Endpoints
+## API Endpoints
 
 | Endpoint                        | Method | Description                                |
 |--------------------------------|--------|--------------------------------------------|
@@ -95,7 +99,7 @@ This application uses:
 
 ---
 
-## 🧪 Running Locally
+## Running Locally
 
 ```bash
 python app.py
@@ -103,21 +107,29 @@ python app.py
 
 Access the chatbot at: [http://localhost:5000](http://localhost:5000)
 
+
+
 ---
 
-## 📷 Demo
+## Deployment
+
+Currently live on: [render](https:open-source-agent-uvwi-onrender.com)
+
+---
+
+## Demo
 ![index page](demo.png)
 
 ---
 
 
-## 📄 License
+## License
 
 MIT License
 
 ---
 
-## 🌟 Acknowledgments
+## Acknowledgments
 
 - [LangChain](https://github.com/langchain-ai/langchain)
 - [Google Gemini API](https://ai.google.dev/)
