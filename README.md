@@ -41,15 +41,16 @@ open-source-agent/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/open-source-agent.git
+git clone https://github.com/abhiram-k-2223/open-source-agent.git
 cd open-source-agent
 ```
 
 ### 2. Set up Virtual Environment
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+python -m venv venv
+source venv/bin/activate # for linux
+.\venv\Scripts\activate # for windows
 ```
 
 ### 3. Install Dependencies
@@ -60,7 +61,7 @@ pip install -r requirements.txt
 
 ### 4. Add Environment Variables
 
-Create a `.env` file with:
+Use `.env` file from the project directory and enter your api keys:
 
 ```env
 GOOGLE_API_KEY=your_google_gemini_api_key
